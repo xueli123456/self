@@ -1,0 +1,89 @@
+body,ul,ol,dl,dd,p,h1,h2,h3,h4,h5,h6,input,textarea,hr,div,em,strong{
+    margin:0;
+    padding:0;
+}
+body{
+    font-family: "微软雅黑";
+}
+ul,ol{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+    outline: none;
+}
+
+img{
+    border: none;
+}
+.clear:after{
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.pay{
+    background-color: #E9EEF3;
+    width: 962px;
+    height: 483px;
+    overflow: hidden;
+    position: relative;
+    z-index: 0!important;
+}
+.payPicture{
+    margin-top: 3%;
+    text-align: center;
+    margin-left: 27%;
+}
+.payPicture img{
+    width: 200px!important;
+    /* margin-left: 27%; */
+}
+.payTitle img{
+    width: 30px;
+    margin-top: 5%;
+}
+.weiPay{
+    position: relative;
+    top: -11px;
+    left: 5px;
+}
+.payTitle h2{
+    line-height: 50px;
+    background-color: rgb(70,211,31);
+    width: 100%;
+    color: white;
+    display: block;
+    font-size: 22px;
+}
+.payTitle p{
+    margin-top: 3%;
+    /*margin-left: 3%;*/
+}
+.payTitle{
+    float: left;
+    width: 100%;
+}
+.payLeft{
+    float: left;
+    margin-left: 5%;
+}
+.tip{
+    color: red;
+}
+.payLeft{
+    margin-top: 7%;
+    background-color: white;
+    width: 43%;
+    text-align: center;
+}
+.arrow{
+    float: left;
+    margin-top: 21%;
+    margin-left: 2%;
+}
+.arrow img{
+    width: 50px;
+}

@@ -1,0 +1,188 @@
+body,ul,ol,dl,dd,p,h1,h2,h3,h4,h5,h6,input,textarea,hr,div,em,strong{
+    margin:0;
+    padding:0;
+}
+body{
+    font-family: "微软雅黑";
+}
+ul,ol{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+    outline: none;
+}
+
+img{
+    border: none;
+}
+.clear:after{
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.box {
+    width: 90%;
+    margin: 0 auto;
+    border: 2px solid white;
+    height: auto;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #E9EEF3;
+    /*关键属性设置 需要把路径设置好*/
+    behavior: url(../js/PIE.htc);
+}
+
+.left {
+    width: 59%;
+    float: left;
+    border-right: 2px solid #fff;
+}
+
+#data {
+    width: 90%;
+    margin: 15px auto;
+    padding-right:10px ;
+}
+
+#data>p {
+    margin-top: 10px;
+    text-align: center;
+}
+.data_top{
+    background-color:rgb(223, 224, 267);
+    height: 30px;
+    line-height: 30px;
+}
+
+#data>p>span {
+    padding: 0 ;
+}
+#space{
+    display: inline-block;
+    width: 35%;
+}
+#prev,
+#next,
+#prevs,
+#nexts{
+    cursor: pointer;
+    background-color: rgb(93, 199, 127);
+    border-radius: 10px;
+    display: inline-block;
+    width: 115px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: rgb(223, 224, 267);
+    behavior: url(../js/PIE.htc);
+}
+
+#year {
+    flex: 1;
+    text-align: right;
+}
+
+#title {
+    width: 100%;
+    overflow: hidden;
+    list-style: none;
+    margin: 0 auto;
+    padding: 8px 13px;
+}
+
+#title>li {
+    float: left;
+    width: 10%;
+    text-align: center;
+    margin-right: 15px;
+    margin-left: 4px!important;
+}
+
+#date {
+    width: 100%;
+    margin: 0 15px;
+    overflow: hidden;
+    list-style: none;
+}
+
+#date>li {
+    float: left;
+    width: 11.5%;
+    height: 34px;
+    margin: 5px 3px;
+    border: 2px solid rgba(0, 0, 0, 0);
+    line-height: 34px;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgb(53, 158, 224);
+    border-radius: 10px;
+    color: rgb(223, 224, 267);
+    /*关键属性设置 需要把路径设置好*/
+    behavior: url(../js/PIE.htc);
+}
+.active {
+    background-color: rgb(93, 199, 127) !important;
+    border-radius: 10px;
+    behavior: url(../js/PIE.htc);
+}
+.right{
+    float: left;
+    padding: 0px 15px;
+    width: 37%;
+    height: 399px;
+    overflow-y: auto;
+}
+.right a{
+    display: block;
+    color: #333333;
+}
+.dataTip{
+    display: block;
+    text-align: center;
+    margin-top: 21px;
+    font-size: 18px;
+}
+.dataTip span{
+    color: red;
+}
+.right_div{
+    width: 80%;
+    padding: 0 20px;
+    height: 39px;
+    background-color: white;
+    border-radius: 10px;
+    float: left;
+    margin: 17px 15px 0 16px;
+    line-height: 39px;
+    cursor: pointer;
+    -moz-box-shadow:5px 5px 5px #888888;
+    -webkit-box-shadow:5px 5px 5px #888888;
+    box-shadow: 5px 5px 5px #888888;
+    behavior: url(../js/PIE.htc);
+}
+.queueNumber{
+    float: right;
+}
+.queueNumber .number{
+    color: red;
+}
+.oldMouthDat{
+    color:rgb(154,154,154)!important;
+    /*cursor:not-allowed!important;*/
+    pointer-events:none;
+}
+.data_box{
+    background-color: #E9EEF3;
+    width: 962px;
+    height: 483px;
+    overflow: hidden;
+    position: relative;
+    z-index: 0!important;
+}
+.haveCount{
+    color: red!important;
+}

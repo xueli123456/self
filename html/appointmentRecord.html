@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+<!--	html缓存问题-->
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>医技预约自助机</title>
+	<link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+	<link rel="stylesheet" href="../css/inspectCheck.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+	<script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+	<script src="../js/json2.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+</head>
+<style>
+	.tipPopup-mask {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 100%;
+		background-color: #000;
+		opacity: 0.5;
+		filter: alpha(opacity=50);
+		display: none;
+	}
+</style>
+<body>
+<!--签到缴费 -->
+<div class="homePage_title">
+	<div class="homePage_title_logo">
+		<div class="homePage_title_left">
+			<img src="../images/index_img/log.png" alt="logo">
+		</div>
+		<div class="homePage_title_right">
+			<p id="timer"></p>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="user_info">
+		   <div class="backHome" id="clickBackHome">
+			<a>
+				首页
+			</a>
+		</div>
+		<div class="user_info_left" >
+			<p>欢迎使用!</p>
+			<span>姓名:</span><span class="name">XXX</span>
+			<span>性别:</span><span class="sex">女</span>
+			<span>年龄:</span><span class="age">29</span>
+		</div>
+		<div class="user_info_right">
+			<h2>操作倒计时:<span id="clock"></span>秒</h2>
+		</div>
+		<div class=" user_info_right backBtn">
+            <h6>返回上一页</h6>
+        </div>
+		<div class="clear"></div>
+	</div>
+</div>
+<div class="inspeckCheck_content">
+	<div class="content_left" id="contentLeft">
+		<div class="clear"></div>
+	</div>
+	<div class="content_right">
+		<div class="prev">上一页</div>
+		<span>
+			<span class="pageNum">1</span>
+			/
+			<span class="pageNo">1</span>
+		</span>
+		<div class="next">下一页</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- 无预住院申请 -->
+<div class="reserSuccess" style="display: none">
+	<div class="reservationInf">
+		<h2>温馨提示</h2>
+		<p style="margin: 18% 0;">您没有预住院申请记录！</p>
+	</div>
+</div>
+<div class="tipPopup-mask"></div>
+</body>
+</html>
+<script src="../util/http.js?v=1.0.38"></script>
+<script src="../util/util.js?v=1.0.38"></script>
+<script src="../js/popup.js?v=1.0.38"></script>
+<script type="text/javascript">
+	countdown('92530018103527854',true);
+	// 获取两年前的今天
+	function getTwoYear() {
+		// 先获取当前时间
+		var curDate = (new Date()).getTime();
+		// 将半年的时间单位换算成毫秒
+		var halfYear = 365*2 * 24 * 3600 * 1000;
+		var pastResult = curDate - halfYear;  // 半年前的时间（毫秒单位）
+
+		// 日期函数，定义起点为半年前
+		var pastDate = new Date(pastResult),
+				pastYear = pastDate.getFullYear(),
+				pastMonth = pastDate.getMonth() + 1,
+				pastDay = pastDate.getDate();
+
+		return pastYear + '-' + pastMonth + '-' + pastDay;
+	}
+	//明天的时间
+	 var day3 = new Date();
+	 day3.setTime(day3.getTime()+24*60*60*1000);
+	 var s3 = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate();
+	//调用接口数据
+	var pageNo = 1;
+	var pageNum = 4;
+	var pageSize = 4;
+	var startDateTime=getTwoYear();
+	var data={
+		"pageNo": pageNo,
+		"pageNum": pageNum,
+		"pageSize": pageSize,
+		"patientId":localStorage.getItem("patientId"),
+		"endDateTime":s3,
+		"startDateTime":startDateTime
+	};
+	getData(data);
+	var getRes = '';
+	$(".tipPopup-mask").css("display", "block");
+	$(".content_right").css("display", "none");
+	ZENG.msgbox.show("正在加载中，请稍后...", 6, 10000);
+	function getData(data){
+		post('selfMachine/queryHospitalizationInfo',data,function(res){
+			$(".tipPopup-mask").css("display", "none")
+			ZENG.msgbox._hide();
+			var od = document.getElementById("contentLeft");
+			od.innerHTML = ''
+			res = res.result;
+			getRes  = res;
+			if( res.list.length == 0|| res.list == null){
+				ZENG.msgbox._hide();
+				$(".tipPopup-mask").css("display", "none")
+				$('.reserSuccess').css('display','block');
+				$('.inspeckCheck_content').css('display','none');
+			}else{
+				ZENG.msgbox._hide();
+				$(".tipPopup-mask").css("display", "none");
+				$(".content_right").css("display", "block");
+				$('.pageNum').html(getRes.pageNum);
+				$('.pageNo').html(getRes.pages);
+				for(var i=0; i<res.list.length; i++){
+					var remarks ='';
+					if (res.list[i].remarks == '' || res.list[i].remarks == '|' || res.list[i].remarks == null ) {
+						remarks = '无'
+					}else{
+						remarks = res.list[i].remarks
+					}
+					op= '<div class="apply_info voucherInfo recordList">'+
+							'<p>'+'<span class="selectionName">'+ '诊疗号：'+'</span>' + '<span class="selectionContent">'+res.list[i].patientCode +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '联系人姓名：'+'</span>' + '<span class="selectionContent">'+res.list[i].contactsName +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '公司名称：'+'</span>' + '<span class="selectionContent">'+res.list[i].companyName +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '公司电话：'+'</span>' + '<span class="selectionContent">'+res.list[i].companyPhone +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '公司邮编：'+'</span>' + '<span class="selectionContent">'+res.list[i].companyPostCode +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '联系人电话：'+'</span>' + '<span class="selectionContent">'+res.list[i].contactsPhone  + '</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '联系人地址：'+'</span>'+'<span class="selectionContent">'+res.list[i].contactsAddress +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '操作时间：' + '</span>'+'<span class="selectionContent">'+ res.list[i].updateDate +'</span>'+'</p>'+
+							'</div>'
+					od.innerHTML += op;
+				}
+			}
+		},function(){
+			$(".tipPopup-mask").css("display", "none")
+			ZENG.msgbox._hide();
+			ZENG.msgbox.show("数据拉取失败", 5, 3000);
+		})
+	}
+	var that = this;
+	// 点击下一个页
+	$('.next').click(function(){
+		if(getRes.nextPage >0){
+			var data = {
+				"pageNo": ++pageNo,
+				"pageNum": pageNum,
+				"pageSize": pageSize,
+				"patientId":localStorage.getItem("patientId"),
+				"endDateTime":s3,
+				"startDateTime":startDateTime
+			};
+			getData(data);
+		}else{
+			//console.log('最后一页');
+		}
+	});
+	//点击下一页
+	$('.prev').click(function(){
+		if(getRes.prePage>0){
+			var data = {
+				"pageNo": --pageNo,
+				"pageNum": pageNum,
+				"pageSize": pageSize,
+				"patientId":localStorage.getItem("patientId"),
+				"endDateTime":s3,
+				"startDateTime":startDateTime
+			};
+			getData(data);
+		}else{
+			//console.log('第一页');
+		}
+	});
+</script>

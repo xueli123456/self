@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+    <!--	html缓存问题-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>医技预约自助机</title>
+    <link rel="stylesheet" href="../css/selectionDate.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/index.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/inspectCheck.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+    <script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+    <link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+    <script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+    <script src="../js/json2.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+    <!--[if IE]>
+    <script src="../util/base64-polyfill.js?v=1.0.38"></script>
+    <![endif]-->
+    <!-–[if IE]>
+    <style type="text/css">
+        .data_box {
+            z-index: -1;
+        }
+        #title>li {
+            margin-left: 8px;
+        }
+    </style>
+    <![endif]–->
+</head>
+<body>
+<div class="homePage_title">
+    <div class="homePage_title_logo">
+        <div class="homePage_title_left">
+            <img src="../images/index_img/log.png" alt="logo">
+        </div>
+        <div class="homePage_title_right">
+            <p id="timer">2020年02月06日 11:18 星期四</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="user_info">
+           <div class="backHome" id="clickBackHome">
+            <a>
+                首页
+            </a>
+        </div>
+        <div class="user_info_left">
+            <p>欢迎使用!</p>
+            <span>姓名:</span><span class="name">xxx</span>
+            <span>性别:</span><span class="sex">xx</span>
+            <span>年龄:</span><span class="age">xx</span>
+        </div>
+        <div class="user_info_right">
+            <h2>操作倒计时:<span id="clock"></span>秒</h2>
+        </div>
+        <div class=" user_info_right backBtn">
+            <h6>返回上一页</h6>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="data_box">
+    <div class="box">
+        <div class="left">
+            <div id="data">
+                <p class="data_top">
+                    <span id="year">2018</span><span>年</span> <span id="mouth"></span><span>月</span>
+                </p>
+                <ul id="title">
+                    <li>日</li>
+                    <li>一</li>
+                    <li>二</li>
+                    <li>三</li>
+                    <li>四</li>
+                    <li>五</li>
+                    <li>六</li>
+                </ul>
+                <ul id="date"></ul>
+                <p class="bottom">
+                    <span id="prev">上一月</span>
+                    <span id="space"></span>
+                    <span id="next">下一月</span>
+                </p>
+            </div>
+        </div>
+        <div class="right" id="rightId">
+            <!-- <div class="right_div"><span>8:00~9:00</span> <span class="queueNumber">剩余号源<span class="number">3</span>人次</span></div>-->
+            <div class="clear"></div>
+        </div>
+        <p class="bottoms" style="float: left; position: absolute;top:76%;left:62%;">
+            <span id="prevs" style="margin-right: 40px;">上一页</span>
+            <span id="spaces"></span>
+            <span id="nexts">下一页</span>
+        </p>
+        <div class="clear"></div>
+    </div>
+    <div class="dataTip"><span>[温馨提示]：</span>请选择预约时间,预约成功后，请准时到医院就诊！</div>
+</div>
+<div class="tipPopup-mask"></div>
+</body>
+</html>
+<script type="text/javascript" src="../util/http.js?v=1.0.38"></script>
+<script src="../js/popup.js?v=1.0.38"></script>
+<script type="text/javascript" src="../util/util.js?v=1.0.38"></script>
+<script type="text/javascript" src="../js/selectionDate.js?v=1.0.38"></script>
+<script>
+  countdown('92530018103527854',true);
+</script>
+

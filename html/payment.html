@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+    <!--	html缓存问题-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>医技预约自助机</title>
+    <link rel="stylesheet" href="../css/index.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/payment.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/inspectCheck.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+    <link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+    <script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+    <script src="../js/json2.js"></script>
+    <script type="text/javascript" src="../util/qrcode.min.js?v=1.0.38"></script>
+    <script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+    <script src="../js/popup.js?v=1.0.38"></script>
+    <!--[if IE]>
+    <script src="../util/base64-polyfill.js?v=1.0.38"></script>
+    <![endif]-->
+    <!-–[if IE]>
+    <style type="text/css">
+        .pay{
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+<!--支付界面-->
+    <div class="homePage_title">
+    <div class="homePage_title_logo">
+        <div class="homePage_title_left">
+            <img src="../images/index_img/log.png" alt="logo">
+        </div>
+        <div class="homePage_title_right">
+            <p id="timer">2020年02月06日 11:18 星期四</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="user_info">
+         <div class="backHome" id="payBackHome">
+            <a>
+                首页
+            </a>
+        </div>
+        <div class="user_info_left">
+            <p>欢迎使用!</p>
+            <span>姓名:</span><span class="name">xxx</span>
+            <span>性别:</span><span class="sex">xx</span>
+            <span>年龄:</span><span class="age">xx</span>
+        </div>
+        <div class="user_info_right">
+            <h2>操作倒计时:<span id="clock"></span>秒</h2>
+        </div>
+        <div class="user_info_right backPay">
+            <h6>返回上一页</h6>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="xiaopiao" style="display:none">
+    <div class="printtext" style="background: #fff;width: 260px;" >
+        <div class="text" style="font-size: 20px;font-weight: bold;text-align:center;">
+            <div class="text" style="font-size: 20px;font-weight: bold;text-align:center;">西北妇女儿童医院</br>预约扣费凭证</div></div>
+        <div class="tt" style="margin: 0 auto;height: 20px;width: 260px;line-height: 20px;">
+            <span class="p1" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;float:left;">姓名:</span>
+            <span class="p2" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;float:right;">诊疗号:</span>
+        </div>
+        <div class="mm" style="margin: 0 auto;height: 20px;width: 260px;line-height: 20px;border-bottom:1px solid #000;">
+            <span class="p1" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;float:left;">执行科室: </span>
+            <span class="p2" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;float:right;">申请单号:</span>
+        </div>
+        <div class="dd" style="margin: 0 auto;margin-top: 0px;margin-left: 0px;width: 260px;border-bottom:1px solid #000;">
+            <p class="p1" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">预约组:</p>
+            <p class="p2" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">排队号:</p>
+            <p class="p3" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">预约项目:</p>
+            <p class="p4" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">预约时间:</p>
+            <p class="p5" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">扣费时间:</p>
+            <p class="p6" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">打印时间:</p>
+            <p class="p7" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">支付金额:元</p>
+        </div>
+        <div class="ff" style="height: 80px;width: 260px;line-height: 30px;border-bottom:1px solid #000;font-size: 12px;">申请单号:
+            <div id="image002" style="margin-bottom:5px;margin-left:50px;"></div>
+        </div>
+        <div class="ff" style="height: auto;width: 260px;line-height: 30px;border-bottom:1px solid #000;font-size: 12px;">
+            <p class="remark">注意事项：</p>
+        </div>
+        <div class="ff"  style="height: 60px;width: 260px;line-height: 30px;font-size: 12px;">
+            <p style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">温馨提示:</p>
+            <p style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">1.胎心监护请勿空腹以免影响检查</p>
+            <p style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">2.请您提前在候诊区等待呼叫</p>
+        </div>
+    </div>
+</div>
+
+    <div class="pay">
+        <div class="apply_info payInfo" id="pay_info">
+        </div>
+        <div class="arrow">
+            <img src="../images/arrow.png" alt="">
+        </div>
+        <div class="payLeft">
+            <div class="payTitle">
+                <h2>请使用微信扫码付款</h2>
+                <p><span class="tip">[温馨提示]:</span>  扫码支付成功后请您耐心等待支付结果...</p>
+                <div class="payPicture" id="qrcode">
+                    <!-- <div id="qrcode" style="width:200px; height:200px;"></div> -->
+                    <!-- <img src="../images/timg.jpg" alt=""> -->
+                </div>
+                <img src="../images/pay.png" alt="">
+                <span class="weiPay">微信支付</span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="tipPopup-mask"></div>
+</body>
+</html>
+<script src="../util/http.js?v=1.0.38"></script>
+<script src="../util/util.js?v=1.0.38"></script>
+<script type="text/javascript" src="../util/jquery-barcode.js?v=1.0.38" charset="utf-8"></script>
+<script src="../util/LodopFuncs.js?v=1.0.38"></script>
+<script src="../js/payment.js?v=1.0.38"></script>
+<script>
+    countdown('92530018103527854',true);
+    var t = null;
+    var inter = null;
+    function countdown(code,type){
+        post( 'selfMachine/findSelfCountDownByCode/' + code,{},function(res){
+            //console.log("自助机操作时间")
+            if(res.code == 200){
+                t = res.result
+                $("#clock").html(t)
+                inter = setInterval("fun("+type +")", 1000);
+            }else{
+                t = 90;
+                inter = setInterval("fun("+type +")", 1000);
+            }
+        },function(){
+            //console.log("提交失败！")
+        });
+    }
+    function fun(type) {
+        if(t <= 0) {
+            if(type == true){
+                // window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+                clearInterval(inter);
+            }else{
+                window.opener = window;
+                var win = window.open("", "_self");
+                win.close();
+                clearInterval(inter);
+            }
+        }else{
+            t--;
+            $("#clock").html(t);
+        }
+    }
+</script>

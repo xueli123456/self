@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+		<!--	html缓存问题-->
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title>医技预约自助机</title>
+		<link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+		<script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+		<script src="../js/json2.js?v=1.0.38"></script>
+		<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+	</head>
+	<body>
+	<!--预约检验-->
+		<div class="homePage_title">
+	    	<div class="homePage_title_logo">
+	    		<div class="homePage_title_left">
+	            	<img src="../images/index_img/log.png" alt="logo">
+		        </div>
+		        <div class="homePage_title_right">
+					<p id="timer">2020年02月06日 11:18 星期四</p>
+		        </div>
+		        <div class="clear"></div>
+	    	</div>
+	        <div class="user_info">
+		        <div class="user_info_left">
+					<p>欢迎使用!</p>
+					<span>姓名:</span><span class="name">xxx</span>
+					<span>性别:</span><span class="sex">xx</span>
+					<span>年龄:</span><span class="age">xx</span>
+		        </div>
+		        <div class="user_info_right">
+					<h2>操作倒计时:<span id="clock"></span>秒</h2>
+		        </div>
+		        <div class="clear"></div>
+	        </div>
+    	</div>
+	</body>
+</html>
+<script src="../util/util.js?v=1.0.38"></script>
+<script>
+	// $("#clock").html( getCookie("time"))
+</script>

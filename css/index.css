@@ -1,0 +1,172 @@
+
+body,ul,ol,dl,dd,p,h1,h2,h3,h4,h5,h6,input,textarea,hr,div,em,strong{
+	margin:0;
+	padding:0;
+}
+body{
+	font-family: "微软雅黑";
+}
+ul,ol{
+	list-style-type: none;
+}
+a{
+	text-decoration: none;
+	outline: none;
+}
+
+img{
+	border: none;
+}
+.clear:after{
+	content: "";
+	display: block;
+	clear: both;
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+.homePage_title{
+	height: auto;
+	width:962px;
+}
+.homePage_title_logo{
+	padding: 13px 20px 0 20px;
+}
+.homePage_title_left{
+	float: left;
+}
+.homePage_title_left img{
+	width: 240px;
+	height: 60px;
+}
+.homePage_title_right{
+	float: right;
+	line-height: 48px;
+}
+.homePage_title_right p{
+	margin-right: 10px;
+	font-size: 16px;
+	font-weight: 700;
+}
+.homePage_context{
+	background-color: #E9EEF3;
+	padding: 20px 19px 9px 51px;
+	text-align: center;
+	font-size: 22px;
+	width: 892px;
+	overflow: hidden;
+	position: relative;
+	z-index: 0!important;
+}
+.homePage_context img{
+	width: 90px;
+	height: 90px;
+	margin-top: 50px;
+}
+.homePage_context .inspect{
+	float:left;
+	width: 47%;
+	height: 213px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 30px;
+	-moz-box-shadow:5px 5px 5px #888888;
+	-webkit-box-shadow:5px 5px 5px #888888;
+	box-shadow: 5px 5px 5px #888888;
+	/*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+	behavior: url(../js/PIE.htc);
+}
+.homePage_context a{
+	display: block;
+	color: white;
+}
+.homePage_context a:hover{
+	color: white;
+	text-decoration: none;
+}
+/*指已经访问过的链接*/
+.homePage_context a:visited{
+	text-decoration: none!important;
+	color: white;
+}
+.inspect p{
+	margin-top: 10px;
+}
+.inspectCheck{
+	background: rgb(246,190,71);
+}
+.homePage_context .check{
+	background: rgb(34,204,116);
+	margin: 0 30px;
+}
+.homePage_context .pay{
+	background: rgb(15,167,230);
+	width: 47%;
+	margin-left: 4%;
+}
+.homePage_context .contract{
+	background: rgb(50,187,179);
+}
+
+.homePage_context .voucher{
+	background: rgb(50,183,240);
+	margin: 0 20px;
+}
+.homePage_context .hospitalization{
+	background: rgb(50,187,179);
+}
+.homePage_context .record{
+	background: rgb(34,204,116);
+	margin-left: 20px;
+}
+.voucher, .record, .hospitalization, .contract{
+	width: 23%!important;
+	margin-top: 15px!important;
+}
+.user_info{
+	background-color: #E9EEF3;
+	padding: 10px 20px 0px 20px;
+	position: relative;
+	z-index: 0!important;
+}
+.user_info_left{
+	float: left;
+	font-size: 16px;
+	font-weight: 700;
+}
+.user_info_right{
+	float: right;
+	background-color: rgb(241,118,118);
+	padding: 6px ;
+	color: white;
+	margin-right: 10px;
+	border-radius: 8px;
+	behavior: url(../js/PIE.htc);
+	cursor: pointer;
+}
+.user_info_right h2{
+	font-size: 16px;
+}
+.user_info_left p{
+	display: inline-block;
+	margin-right: 20px;
+	font-size: 28px;
+}
+
+.tipPopup-mask {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	/* display: none; */
+}
+.backBtn, .backPay{
+	cursor: pointer;
+	font-size: 24px;
+	font-weight: 700;
+	/*margin-top: 3px;*/
+}

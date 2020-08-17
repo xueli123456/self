@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+    <!--	html缓存问题-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>医技预约自助机</title>
+    <link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+    <link rel="stylesheet" href="../css/reservationSuccess.css?v=1.0.38">
+    <script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+    <!--[if IE]>
+    <script src="../util/base64-polyfill.js?v=1.0.38"></script>
+    <![endif]-->
+    <!-–[if IE]>
+    <style type="text/css">
+        .reserSuccess{
+            z-index: -1;
+        }
+    </style>
+    <![endif]–->
+    <style type="text/css">
+        #checkProName{
+            font-size: 20px;
+            line-height: 45px;
+            text-align: left;
+            margin-left: 30%;
+            overflow: hidden;
+        }
+        .name_left{
+            float: left;
+        }
+        .checkName{
+            float: left;
+            width: 300px;
+        }
+        body{
+            /*height: 768px;*/
+            /*overflow: hidden;*/
+        }
+    </style>
+</head>
+<body>
+<!--预约成功界面 -->
+<div class="homePage_title">
+    <div class="homePage_title_logo">
+        <div class="homePage_title_left">
+            <img src="../images/index_img/log.png" alt="logo">
+        </div>
+        <div class="homePage_title_right">
+            <p id="timer">2020年02月06日 11:18 星期四</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="user_info">
+        <div class="user_info_left">
+            <p>欢迎使用!</p>
+            <span>姓名:</span><span class="name">xxx</span>
+            <span>性别:</span><span class="sex">xx</span>
+            <span>年龄:</span><span class="age">xx</span>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="reserSuccess">
+    <div class="reservationInf">
+        <h2 id="isReservation">您已预约成功。请准时进行就诊</h2>
+        <p>预约科室：<span class="officeName">普通外科</span></p>
+        <div id='checkProName'>
+            <div class="name_left">预约项目：</div>
+<!--            <div class="checkName">儿科急腹症（含肠套叠、肠梗阻、阑尾炎及肠系膜巴结阑尾炎及肠系膜淋巴结阑尾炎及肠系膜淋巴结）</div>-->
+<!--            <div class="checkName"> 早孕</div>-->
+        </div>
+        <p>预约日期：<span class="reservationDate">2020-01-19</span></p>
+        <p class="last_text">预约时段：<span class="reservationTime">12:00~13:00</span></p>
+    </div>
+    <div class="backHomes">
+        <a >
+            <span class="backSign">返回首页</span>(<span id="clock">10</span>)
+        </a>
+    </div>
+    <div class="dataTip"><span>[自费流程]:</span>请在预约检查当天到医院，通过小程序或自助机进行签到缴费排队！</div>
+    <div class="dataTip"><span>[医保流程]:</span>请在预约检查当天到医院，持医保卡在人工窗口缴费后，通过小程序或自助机进行签到缴费排队！</div>
+</div>
+</body>
+</html>
+<script src="../util/http.js?v=1.0.38"></script>
+<script src="../util/util.js?v=1.0.38"></script>
+<script type="text/javascript">
+    var inspectDate = GetRequest('item'); //预约参数
+    inspectDate = JSON.parse(inspectDate); //可以将json字符串转换成json对象
+    var str = inspectDate.checkProName;
+    var array = str.split(",");
+    var checkProNameHtml = document.getElementById("checkProName");
+    var loadDay = new Date().getDate(),
+        loadYear = new Date().getFullYear(),
+        loadMonth = new Date().getMonth();
+    var reservationDate = inspectDate.reservationDate;
+    var month =  reservationDate.substring(5,7);
+    var day = reservationDate.substring(7,10);
+   if(Number(month)){
+       // //console.log(month)
+   }else{
+	   month =  reservationDate.substring(5,6)
+   }
+   if(Number(day)){
+        // //console.log(day)
+   }else{
+   	    day =  reservationDate.substring(7,9)
+   }
+	if(loadYear  == reservationDate.substring(0, 4) && Number(loadMonth)+1 == month && loadDay== day ){
+        $('.backSign').html("签到缴费");
+    }
+    for(var i=0;i<array.length;i++){
+        op = '<div class="checkName">'+ array[i]+'</div>'
+        checkProNameHtml.innerHTML += op;
+    }
+    $('.checkName').each(function(index){
+        if(index >= 1) {
+            $(this).css({
+                "margin-left": "100px",
+                "line-height": "30px"
+            })
+            $('.backHomes').css("margin","30px auto")
+        }
+        if($('#checkProName').height()>60){
+            $('.backHomes').css("margin","24px auto");
+            $('#checkProName').css("line-height","30px")
+        }
+        if(index >= 2){
+            $('.backHomes').css("margin","9px auto")
+        }
+    })
+    if(inspectDate.type == 1){
+        $("#isReservation").html("您已改约成功。请准时进行就诊")
+    }
+    $('.officeName').html(inspectDate.execOfficeName)
+    $('.reservationDate').html(inspectDate.reservationDate)
+    $('.reservationTime').html(inspectDate.reservationStartTime)
+    function fun() {
+        var t = $("#clock").html();
+        if(t <= 0) {
+            if(loadYear  == reservationDate.substring(0, 4) && Number(loadMonth)+1 == month && loadDay== day ){
+                window.location.href = "checkPayment.html";
+                clearInterval(inter);
+            }else{
+                window.location.href ="index.html?patientId="+localStorage.getItem("patientId");
+                clearInterval(inter);
+            }
+        }else{
+            t--;
+            $("#clock").html(t);
+        }
+    }
+    var inter = setInterval("fun()", 1000);
+    $('.backHomes').click(function(){
+        if(loadYear == reservationDate.substring(0, 4) && Number(loadMonth)+1 == month && loadDay== day ){
+                window.location.href = "checkPayment.html";
+                clearInterval(inter);
+        }else{
+                window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+                clearInterval(inter);
+        }
+    })
+    function GetRequest(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var params = window.location.search.substr(1);
+        params = window.decodeURIComponent(window.atob(params));
+        var r = params.match(reg);
+        if (r != null) {
+            return decodeURI(r[2]);
+        }
+        return null;
+    }
+</script>

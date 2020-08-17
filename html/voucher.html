@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+	<!--	html缓存问题-->
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>医技预约自助机</title>
+	<link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+	<link rel="stylesheet" href="../css/inspectCheck.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+	<script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+	<script src="../js/json2.js?v=1.0.38"></script>
+    <!--[if IE]>
+    <script src="../util/base64-polyfill.js?v=1.0.38"></script>
+    <![endif]-->
+</head>
+<body>
+<!--打印凭证-->
+<div class="homePage_title">
+	<div class="homePage_title_logo">
+		<div class="homePage_title_left">
+			<img src="../images/index_img/log.png" alt="logo">
+		</div>
+		<div class="homePage_title_right">
+			<p id="timer">2020年02月06日 11:18 星期四</p>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="user_info">
+		   <div class="backHome" id="clickBackHome">
+			<a>
+				首页
+			</a>
+		</div>
+		<div class="user_info_left">
+			<p>欢迎使用!</p>
+			<span>姓名:</span><span class="name">xxx</span>
+			<span>性别:</span><span class="sex">xx</span>
+			<span>年龄:</span><span class="age">xx</span>
+		</div>
+		<div class="user_info_right">
+			<h2>操作倒计时:<span id="clock"></span>秒</h2>
+		</div>
+		<div class=" user_info_right backBtn">
+			<h6>返回上一页</h6>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<div class="xiaopiao" style="display:none">
+	<div class="printtext" style="background: #fff;width: 260px;" >
+		<div class="text" style="font-size: 20px;font-weight: bold;text-align:center;">
+			<div class="text" style="font-size: 20px;font-weight: bold;text-align:center;">西北妇女儿童医院</br>预约扣费凭证</div></div>
+		<div class="tt" style="margin: 0 auto;height: 20px;width: 260px;line-height: 20px;">
+			<span class="p1" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;float:left;">姓名:</span>
+			<span class="p2" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;float:right;">诊疗号:</span>
+		</div>
+		<div class="mm" style="margin: 0 auto;height: 20px;width: 260px;line-height: 20px;border-bottom:1px solid #000;">
+			<span class="p1" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;float:left;">执行科室: </span>
+			<span class="p2" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;float:right;">申请单号:</span>
+		</div>
+		<div class="dd" style="margin: 0 auto;margin-top: 0px;margin-left: 0px;width: 260px;border-bottom:1px solid #000;">
+			<p class="p1" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">预约组:</p>
+			<p class="p2" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">排队号:</p>
+			<p class="p3" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">预约项目:</p>
+			<p class="p4" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">预约时间:</p>
+			<p class="p5" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">扣费时间:</p>
+			<p class="p6" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">打印时间:</p>
+			<p class="p7" style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">支付金额:元</p>
+		</div>
+		<div class="ff" style="height: 80px;width: 260px;line-height: 30px;border-bottom:1px solid #000;font-size: 12px;">申请单号:
+			<div id="image002" style="margin-bottom:5px;margin-left:50px;"></div>
+		</div>
+		<div class="ff" style="height: auto;width: 260px;line-height: 30px;border-bottom:1px solid #000;font-size: 12px;">
+			<p class="remark">注意事项：</p>
+		</div>
+		<div class="ff"  style="height: 60px;width: 260px;line-height: 30px;font-size: 12px;">
+			<p style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">温馨提示:</p>
+			<p style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">1.胎心监护请勿空腹以免影响检查</p>
+			<p style="margin: 0 auto;height: 20px;line-height: 20px;font-size: 12px;margin-top: 0px;">2.请您提前在候诊区等待呼叫</p>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="inspeckCheck_content">
+	<div class="content_left" id="content_left">
+		<div class="clear"></div>
+	</div>
+	<div class="content_right">
+		<div class="prev">上一页</div>
+		<span class="pageNum">1</span>
+		/
+		<span class="pageNo">1</span>
+		<div class="next">下一页</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- 无打印凭证 -->
+<div class="reserSuccess" style="display: none">
+	<div class="reservationInf">
+		<h2>温馨提示</h2>
+		<p style="margin: 18% 31%;">您没有打印凭证信息！</p>
+	</div>
+</div>
+<div class="tipPopup-mask"></div>
+</body>
+</html>
+<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+<script src="../util/util.js?v=1.0.38"></script>
+<script src="../js/popup.js?v=1.0.38"></script>
+<script src="../util/http.js?v=1.0.38"></script>
+
+<script type="text/javascript" src="../util/jquery-barcode.js?v=1.0.38" charset="utf-8"></script>
+<script src="../util/LodopFuncs.js?v=1.0.38"></script>
+<script type="text/javascript">
+
+
+	countdown('92530018103527854',true);
+	$(".tipPopup-mask").css("display", "block");
+	$(".content_right").css("display", "none");
+	ZENG.msgbox.show("正在加载中，请稍后...", 6, 5000);
+	//查询改约退约申请单   1：查询已预约未签到记录
+	//调用接口数据https://yjyys.nwwch.com:9085/api/swagger-ui.html#!/%E8%87%AA%E5%8A%A9%E6%9C%BAcontroller/findSingUpByPatientIdUsingPOST
+	var pageNo = 1;
+	var pageSize = 4;
+	var data={
+		"pageNo": pageNo,
+		"pageSize": pageSize,
+		"patientId":localStorage.getItem("patientId")
+	};
+	getData(data);
+	var getRes = '';
+	function getData(data){
+		post('selfMachine/findSingUpByPatientId',data,function(res){
+			if(res.code === 200){
+				var od=document.getElementById("content_left");
+				od.innerHTML = '';
+				res = res.result;
+				getRes = res;
+				resData = res;
+				if( res.list.length == 0 || res.list == null){
+					ZENG.msgbox._hide();
+					$(".tipPopup-mask").css("display", "none");
+					$('.reserSuccess').css('display','block');
+					$('.inspeckCheck_content').css('display','none');
+				}else{
+					ZENG.msgbox._hide();
+					$(".tipPopup-mask").css("display", "none");
+					$(".content_right").css("display", "block");
+					$('.pageNum').html(getRes.pageNum);
+					$('.pageNo').html(getRes.pages);
+					for(var i=0;i<res.list.length;i++){
+						var remarks ='';
+						if (res.list[i].remarks == '' || res.list[i].remarks == '|' || res.list[i].remarks == null) {
+							remarks = '无';
+						}else{
+							var array = res.list[i].remarks.split("|");
+							remarks = array.join('')
+						}
+						var colors=res.list[i].printStaus=='0'&&res.list[i].printNum==0?'rgb(91, 198, 126)':'#bbbbbb';
+						var btnText=res.list[i].printStaus=='0'&&res.list[i].printNum==0?'打印':'已打印';
+						op= '<div class="apply_info voucherInfo">'+
+								'<p>'+'<span class="selectionName">'+ '申请单号：'+'</span>' + '<span class="selectionContent">'+res.list[i].inspectForm +'</span>'+'</p>'+
+								'<p>'+'<span class="selectionName">'+ '申请科室：'+'</span>' + '<span class="selectionContent">'+res.list[i].applyOffice +'</span>'+'</p>'+
+								'<p>'+'<span class="selectionName">'+ '申请医生：'+'</span>' + '<span class="selectionContent">'+res.list[i].applyDoctor +'</span>'+'</p>'+
+								'<p>'+'<span class="selectionName">'+ '预约时间：'+'</span>' + '<span class="selectionContent">'+res.list[i].reservationTime +'</span>'+'</p>'+
+								'<p>'+'<span class="selectionName">'+ '检查项目：'+'</span>' + '<span class="selectionContent">'+res.list[i].inspectProject +'</span>'+'</p>'+
+								'<p>'+'<span class="selectionName">'+ '合计金额：'+'</span>' + '<span class="selectionContent">'+res.list[i].totalMoney +'元' + '</span>'+'</p>'+
+								'<p>'+'<span class="selectionName">'+ '预约状态：'+'</span>'+'<span class="selectionContent">'+res.list[i].status +'</span>'+'</p>'+
+								'<p class="remarks">'+'<span class="selectionName">'+ '注意事项：' + '</span>'+'<span class="selectionContent">'+ remarks +'</span>'+'</p>'+
+								'<div class="signIn" style="background:'+colors+'">' + btnText + '</div>' +
+								'</div>';
+						od.innerHTML += op;
+					};
+				}
+			} else {
+				ZENG.msgbox.show( res.message, 5, 2000);
+				setTimeout(function(){
+					window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+				},2000)
+			}
+		},function(){
+			//console.log("提交失败！");
+		})
+	}
+
+	$('.content_left').on('click','.signIn',function(){
+		var that = this
+		var index = $(this).index('.signIn');
+		if(getRes.list[index].printStaus=="0"&&getRes.list[index].printNum==0){
+			var popup = new Popup({
+				'type': 'submit',
+				'title': '系统提示',
+				'text': '确认打印？',
+				'cancelbutton': true,
+				'submitcolor': '#fff',
+				'submitbgcolor': '#5BC67E',
+				'submitbordercolor': '#5BC67E',
+				'cancelcolor': '#5BC67E',
+				'cancelbgcolor': '#fff',
+				'cancelbordercolor': '#5BC67E',
+				'submitCallBack': function(){
+					print(index,that)
+				},
+			})
+		}
+	})
+	function getStatusValue(ValueType,ValueIndex){
+		LODOP=getLodop();
+		var strResult=LODOP.GET_VALUE(ValueType,ValueIndex);
+		if (!LODOP.CVERSION) return strResult; else return "";
+	};
+	// 打印小票
+	function print(index,that){
+		var data=null;
+	    post('selfMachine/findSelfReceiptByReservationId/'+ getRes.list[index].reservationId,{},function(res){
+			if(res.code === 200){
+				data= res.result;
+				var patientInfo = JSON.parse(localStorage.getItem("records"));
+				var currentDate = new Date();
+				var currentDateStr = currentDate.toLocaleString();
+				var remarks = data.remarks;
+				var payDate=data.payDate;
+				if (payDate == null || payDate === undefined) {
+					payDate = '无';
+				}
+				if (remarks == null || remarks === undefined) {
+					remarks = '无';
+				}
+
+				$('.tt .p1').html('姓名:' + patientInfo.patientName)
+				$('.tt .p2').html('诊疗号:' + data.patientId)
+				$('.mm .p1').html('执行科室:' + data.execOfficeName)
+				$('.mm .p2').html('申请单号:' + data.inspectForm)
+				$('.dd .p1').html('预约组:' + data.reservationGroupName)
+				$('.dd .p2').html('排队号:' + data.lineCode)
+				$('.dd .p3').html('预约项目:' + data.inspectProject )
+				$('.dd .p4').html('预约时间:' + data.reservationTime)
+				$('.dd .p5').html('扣费时间:' + payDate)
+				$('.dd .p6').html('打印时间:' + currentDateStr)
+				$('.dd .p7').html('支付金额:' + data.totalMoney + '元')
+				$("#image002").barcode(data.inspectForm , "code128", {
+					output: 'css',       //渲染方式 css/bmp/svg/canvas
+					//bgColor: '#ff0000', //条码背景颜色
+					//color: '#00ff00',   //条码颜色
+					barWidth: 2,        //单条条码宽度
+					barHeight: 45,     //单体条码高度
+					// moduleSize: 20,   //条码大小
+					// posX: 10,        //条码坐标X
+					// posY: 5,         //条码坐标Y
+					showHRI: false,    //是否在条码下方显示内容
+					addQuietZone: false  //是否添加空白区（内边距）
+				})
+				$(".remark").html('注意事项：'+remarks)
+
+
+				var LODOP = getLodop();
+				// 打印初始化
+				var printContent=$(".xiaopiao").html();
+
+				if(LODOP){
+					if (LODOP.CVERSION) {
+						LODOP.SET_PRINT_PAGESIZE(1, 780, 1200, '');
+						LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', printContent);
+						// LODOP.PREVIEW();
+						//执行该语句之后，PRINT指令不再返回那个所谓“打印成功”
+						LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS",true);
+						LODOP.On_Return=function(TaskID,Value){
+							var timer = setInterval(function(){
+								if(getStatusValue("PRINT_STATUS_EXIST",Value)==0){
+									post('selfMachine/saveReservatPrintByReservationId/'+ getRes.list[index].reservationId,{},function(res){
+										if(res.code == 200){
+											$(that).html("已打印");
+											$(that).css("background","#bbbbbb");
+										}else{
+											$(".tipPopup-mask").css("display", "block")
+											ZENG.msgbox.show("打印失败",1, 2000);
+											setTimeout(function(){
+												$(".tipPopup-mask").css("display", "none");
+											},2000);
+										}
+									})
+									clearInterval(timer);
+								}
+							},3000);
+						};
+						LODOP.PRINT();
+					} else{
+						ZENG.msgbox.show("数据拉取失败", 5, 2000);
+						setTimeout(function(){
+							window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+						},2000)
+					}
+					strResult=LODOP.GET_SYSTEM_INFO("Drive.Labels");
+				} else {
+					ZENG.msgbox.show("打印控件未启动!", 5, 2000);
+					setTimeout(function(){
+						window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+					},2000)
+				}
+			} else {
+				$(".tipPopup-mask").css("display", "block");
+				ZENG.msgbox.show( res.message, 5, 2000);
+				setTimeout(function(){
+					window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+				},2000)
+			}
+		})
+	}
+
+
+	// 点击下一个页
+	$('.next').click(function(){
+		if(getRes.nextPage >0){
+			var data = {
+				"pageNo": ++pageNo,
+				"pageSize": pageSize,
+				"patientId":localStorage.getItem("patientId"),
+				"type": 2
+			};
+			getData(data);
+		}
+	});
+	$('.prev').click(function(){
+		if(getRes.prePage>0){
+			// pageNo = pageNo--;
+			var data = {
+				"pageNo": --pageNo,
+				"pageSize": pageSize,
+				"patientId":localStorage.getItem("patientId"),
+				"type": 2
+			};
+			//console.log(data);
+			getData(data);
+		}else{
+			//console.log('第一页');
+		}
+	});
+</script>
+

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+    <!--	html缓存问题-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>医技预约自助机</title>
+    <link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+    <link rel="stylesheet" href="../css/reservationSuccess.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/msgbox.css?v=1.0.38"/>
+    <script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+    <script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+    <script type="text/javascript" src="../util/Region.js?v=1.0.38"></script>
+    <!-–[if IE]>
+    <style type="text/css">
+        .information_content {
+            position: relative;
+            z-index: -1;
+        }
+
+        .information {
+            position: relative;
+            z-index: -1;
+        }
+    </style>
+    <![endif]–->
+</head>
+<style>
+    .tipPopup-mask {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+        display: none;
+    }
+</style>
+<body>
+<!--	预住院申请-->
+<div class="homePage_title">
+    <div class="homePage_title_logo">
+        <div class="homePage_title_left">
+            <img src="../images/index_img/log.png" alt="logo">
+        </div>
+        <div class="homePage_title_right">
+            <p id="timer">2020年02月06日 11:18 星期四</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="user_info">
+        <div class="hosBackHome">
+            <a>
+                首页
+            </a>
+        </div>
+        <div class="user_info_left">
+            <p>欢迎使用!</p>
+            <span>姓名:</span><span class="name">XXX</span>
+            <span>性别:</span><span class="sex">女</span>
+            <span>年龄:</span><span class="age">29</span>
+        </div>
+        <div class="user_info_right">
+            <h2>操作倒计时:<span id="clock">0</span>秒</h2>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!--没有有效的住院证-->
+<div class="reserSuccess" style="display: none">
+    <div class="reservationInf">
+        <h2>温馨提示</h2>
+        <p style="margin: 18% 33%;">您没有有效的住院证！</p>
+    </div>
+       <div class="backHome" id="clickBackHome">
+        <a>
+            返回首页
+        </a>
+    </div>
+</div>
+<!--	提交表单 -->
+
+<div class="information_content">
+    <div class="form_box">
+        <form action="#" method="get" name="myform">
+            <div class="information">
+                <div class="information_title formtitle">患者信息</div>
+                <div class="information_input">
+                    <span class="lebal_name">单&nbsp;位&nbsp;&nbsp;名&nbsp;称:</span>
+                    <input type="text" id="companyName" name="companyName" value="请输入单位名称" class="input_log"/>
+                </div>
+                <div class="information_input">
+                    <span class="lebal_name">单&nbsp;位&nbsp;&nbsp;电&nbsp;话:</span>
+                    <input type="text" id="companyPhone" name="companyPhone" value="请输入单位电话" class="input_log"/>
+                </div>
+                <div class="information_input">
+                    <span class="lebal_name">单&nbsp;位&nbsp;&nbsp;邮&nbsp;编:</span>
+                    <input type="text" id="companyPostCode" name="companyPostCode" value="请输入单位邮编" class="input_log"/>
+                </div>
+                <br><br><br>
+                <br><br><br>
+                <div class="information_title formtitle">家庭联系人信息</div>
+                <div class="information_input">
+                    <span class="lebal_name" style="float: left;">联系人关系:</span>
+                    <div style="float: left;margin-left:5px;">
+                        <select class="selected" name="relationType" id="relationType">
+                            <!--							["配偶", "兄", "女", "祖父母", "孙子", "父母", "本人或户主", "子", "弟", "姐", "妹", "外祖父母", "孙女", "外孙子", "外孙女", "其他"]-->
+                            <option value="2">配偶</option>
+                            <option value="3">兄</option>
+                            <option value="4">女</option>
+                            <option value="5">祖父母</option>
+                            <option value="6">孙子</option>
+                            <option value="7">父母</option>
+                            <option value="8">本人或户主</option>
+                            <option value="9">子</option>
+                            <option value="10">弟</option>
+                            <option value="11">姐</option>
+                            <option value="12">妹</option>
+                            <option value="13">外祖父母</option>
+                            <option value="14">孙女</option>
+                            <option value="15">外孙子</option>
+                            <option value="16">外孙子</option>
+                            <option value="17">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="information_input">
+                    <span class="lebal_name">联系人姓名:</span>
+                    <input type="text" id="contactsName" name="contactsName" value="请输入联系人姓名" class="input_log"/>
+                </div>
+                <div class="information_input" style="width:100%;padding-top:10px;">
+                    <span class="lebal_name" style="float: left;">联系人地址:</span>
+                    <div style="float: left;margin-left:5px;">
+                        <select class="selected" id="sel_Province" style="width:80px" name="sel_Province">
+                        </select>
+                        <select class="selected" id="sel_City" name="sel_City">
+                        </select>
+                        <select class="selected" id="sel_County" name="sel_County">
+                        </select>
+                    </div>
+
+                    <!--						<input type="text"  name="" value="请选择联系人所在省市县" class="input_log" />-->
+                </div>
+                <script>
+                    AreaSelector().init();
+
+                    function getValue(id) {
+                        var sel = document.getElementById(id);
+                        if (sel && sel.options) {
+                            alert(sel.options[sel.selectedIndex].value);
+                        }
+                    }
+
+                    function getText(id) {
+                        var sel = document.getElementById(id);
+                        if (sel && sel.options) {
+                            alert(sel.options[sel.selectedIndex].text);
+                        }
+                    }
+                </script>
+                <div class="information_input">
+                    <span class="lebal_name">详&nbsp;细&nbsp;&nbsp;地&nbsp;址:</span>
+                    <input type="text" id="adress" name="adress" value="请输入联系人详细地址" class="input_log"/>
+                </div>
+
+                <div class="information_input">
+                    <span class="lebal_name">联系人电话:</span>
+                    <input type="text" id="contactsPhone" name="contactsPhone" value="请输入联系人电话" class="input_log"/>
+                </div>
+            </div>
+
+        </form>
+        <div class="clear"></div>
+    </div>
+    <div class="backHomes" style="text-align: center;margin-top: 0px">
+        <button type="submit" class="submitbtn">
+            提交
+        </button>
+    </div>
+</div>
+</body>
+</html>
+<script src="../util/util.js?v=1.0.38"></script>
+<script src="../util/http.js?v=1.0.38"></script>
+<script src="../js/popup.js?v=1.0.38"></script>
+<script type="text/javascript">
+    //调用接口数据
+    getData();
+
+    //判断是否有效住院证
+    function getData() {
+        var data = {};
+        $(".tipPopup-mask").css("display", "block")
+        var tip = "正在加载，请稍后...";
+        ZENG.msgbox.show(tip, 6);
+        // 0002716076 预住院查询患者信息
+        post('selfMachine/queryPatientInfo/' + localStorage.getItem("patientId"), data, function (res) {
+            if(res.code == 200){
+                var no = document.querySelector(".reserSuccess");  //无有效住院证模块
+                var yes = document.querySelector(".information_content");  //有有效住院证模块，展示表单模块
+                var res = res.result;
+                if (res != null) {
+                    no.style.display = "none";
+                    yes.style.display = "block";
+                } else {
+                    no.style.display = "block";
+                    yes.style.display = "none";
+                }
+                //查询患者当前预住院信息
+                post('selfMachine/queryCurrHospitalization/' + localStorage.getItem("patientId"), data, function (res) {
+                    $(".tipPopup-mask").css("display", "none")
+                    ZENG.msgbox._hide();
+                    var data = res.result;
+                    var btnText = document.querySelector(".submitbtn");  //按钮文字
+                    if (data.patientCode == null) {
+                        btnText.innerHTML = "提交";
+                        AreaSelector({
+                            selProvinceId: 'sel_Province',
+                            selCityId: 'sel_City',
+                            selAreaId: 'sel_County'
+                        }).initProvince(26, 1, 6)
+                    } else {
+                        btnText.innerHTML = "修改";
+                        var reg = /.+?(省|市|自治区|自治州|县|区)/g;
+                        var region = data.contactsAddress.match(reg);
+                        //console.log(region)
+                        var companyName = document.querySelector("#companyName");  //单位名称
+                        var companyPhone = document.querySelector("#companyPhone");  //单位电话
+                        var companyPostCode = document.querySelector("#companyPostCode");  //单位邮编
+                        var relationType = document.querySelector("#relationType");  //联系人关系
+                        var contactsName = document.querySelector("#contactsName");  //联系人姓名
+                        var sel_Province = document.querySelector("#sel_Province");  //联系人所在省份
+                        var sel_City = document.querySelector("#sel_City");  //联系人所在城市
+                        var sel_County = document.querySelector("#sel_County");  //联系人所在县区
+                        var adress = document.querySelector("#adress");  //联系人详细地址
+                        var contactsPhone = document.querySelector("#contactsPhone");  //联系人电话
+                        AreaSelector({
+                            provinceOptionText: region[0].substring(0, 2),
+                            cityOptionText: region[1],
+                            areaOptionText: region[2]
+                        });
+                        companyName.value = data.companyName;
+                        companyPhone.value = data.companyPhone;
+                        companyPostCode.value = data.companyPostCode;
+                        relationType.value = data.relationType;
+                        contactsName.value = data.contactsName;
+                        adress.value = data.contactsAddress;
+                        contactsPhone.value = data.contactsPhone;
+                    }
+
+                }, function () {
+                    $(".tipPopup-mask").css("display", "none")
+                    ZENG.msgbox._hide();
+                    ZENG.msgbox.show("数据拉取失败", 5, 3000);
+                })
+            } else {
+                $(".tipPopup-mask").css("display", "block")
+                ZENG.msgbox.show(res.message, 1, 2000);
+                setTimeout(function () {
+                    $(".tipPopup-mask").css("display", "none")
+                    window.location.href = "index.html?patientId="+localStorage.getItem("patientId");
+                }, 2000)
+            }
+        }, function () {
+            $(".tipPopup-mask").css("display", "none")
+            ZENG.msgbox._hide();
+            ZENG.msgbox.show("数据拉取失败", 5, 3000);
+            //console.log("提交失败！")
+        })
+    }
+
+    $('.information_content').on('click', '.submitbtn', function () {
+        // //console.log($(this).prev().html());
+        var companyName = document.querySelector("#companyName");  //单位名称
+        var companyPhone = document.querySelector("#companyPhone");  //单位电话
+        var companyPostCode = document.querySelector("#companyPostCode");  //单位邮编
+        var relationType = document.querySelector("#relationType");  //联系人关系
+        var contactsName = document.querySelector("#contactsName");  //联系人姓名
+        var sel_Province = document.querySelector("#sel_Province");  //联系人所在省份
+        var sel_City = document.querySelector("#sel_City");  //联系人所在城市
+        var sel_County = document.querySelector("#sel_County");  //联系人所在县区
+        var adress = document.querySelector("#adress");  //联系人详细地址
+        var contactsPhone = document.querySelector("#contactsPhone");  //联系人电话
+        var contactsAddress = "";
+        var popupText = "确认提交预住院信息？";
+
+        if (companyName.value == null || companyName.value == "" || companyName.value == "请输入单位名称") {
+            popupText = "单位名称不能为空";
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': popupText,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E'
+            })
+            return false;
+        }
+        if (companyPhone.value == null || companyPhone.value == "" || companyPhone.value == "请输入单位电话") {
+            popupText = "单位电话不能为空";
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': popupText,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E'
+            })
+
+            return false;
+        }
+        if (companyPostCode.value == null || companyPostCode.value == "" || companyPostCode.value == "请输入单位邮编") {
+            popupText = "单位邮编不能为空";
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': popupText,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E'
+            })
+
+            return false;
+        }
+        if (contactsName.value == null || contactsName.value == "" || contactsName.value == "请输入联系人姓名") {
+            popupText = "联系人姓名不能为空";
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': popupText,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E'
+            })
+
+            return false;
+        }
+        if (adress.value == null || adress.value == "" || adress.value == "请输入联系人详细地址") {
+            popupText = "联系人详细地址不能为空";
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': popupText,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E'
+            })
+            return false;
+        }
+        if (contactsPhone.value == null || contactsPhone.value == "" || contactsPhone.value == "请输入联系人电话") {
+            popupText = "联系人详细地址不能为空";
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': popupText,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E'
+            })
+            return false;
+        }
+        //console.log(companyName.value)
+        //console.log(sel_Province.options[sel_Province.selectedIndex].text)
+        //console.log(sel_Province.options[sel_Province.selectedIndex].text)
+        //console.log(sel_Province.options[sel_Province.selectedIndex].text)
+        contactsAddress = sel_Province.options[sel_Province.selectedIndex].text + "省" + sel_City.options[sel_City.selectedIndex].text + sel_County.options[sel_County.selectedIndex].text + adress.value;
+        //console.log(contactsAddress)
+        var data = {
+            contactsAddress: contactsAddress,
+            companyName: companyName.value,
+            companyPhone: companyPhone.value,
+            contactsName: contactsName.value,
+            contactsPhone: contactsPhone.value,
+            relationType: relationType.value,
+            companyPostCode: companyPostCode.value,
+            patientId: localStorage.getItem("patientId")
+        }
+        //console.log(1111111)
+        var popup = new Popup({
+            'type': 'submit',
+            'title': '系统提示',
+            'text': popupText,
+            'cancelbutton': true,
+            'submitcolor': '#fff',
+            'submitbgcolor': '#5BC67E',
+            'submitbordercolor': '#5BC67E',
+            'cancelcolor': '#5BC67E',
+            'cancelbgcolor': '#fff',
+            'cancelbordercolor': '#5BC67E',
+            'submitCallBack': function () {
+                $(".tipPopup-mask").css("display", "block")
+                var tip = "正在提交，请稍后...";
+                ZENG.msgbox.show(tip, 6);
+                //提交患者预住院信息
+                post('selfMachine/saveHospitalizationInfo', data, function (res) {
+                    // var res=res.result;
+                    //console.log(res);
+                    if (res.code == 200) {
+                        //console.log(1111)
+                        $(".tipPopup-mask").css("display", "none")
+                        ZENG.msgbox._hide();
+                        var popup = new Popup({
+                            'type': 'submit',
+                            'title': '系统提示',
+                            'text': "提交成功，是否跳转首页？",
+                            'cancelbutton': true,
+                            'submitcolor': '#fff',
+                            'submitbgcolor': '#5BC67E',
+                            'submitbordercolor': '#5BC67E',
+                            'cancelcolor': '#5BC67E',
+                            'cancelbgcolor': '#fff',
+                            'cancelbordercolor': '#5BC67E',
+                            'submitCallBack': function () {
+                                window.location.href = "index.html?patientId=" + localStorage.getItem("patientId");
+                            },
+                        })
+                    } else {
+                        //console.log(22222)
+                        var tip = res.message;
+                        ZENG.msgbox.show(tip, 5, 3000);
+                    }
+
+                }, function (err) {
+                    $(".tipPopup-mask").css("display", "none")
+                    ZENG.msgbox._hide();
+                    ZENG.msgbox.show("提交失败", 5, 3000);
+                    //console.log("提交失败！")
+                })
+            },
+        })
+    })
+</script>
+<!--<script>-->
+<!--	function clickme(i){-->
+<!--		var tip = "";-->
+<!--		switch(i){-->
+<!--			case 1:-->
+<!--				tip = "服务器繁忙，请稍后再试。";-->
+<!--				break;-->
+<!--			case 4:-->
+<!--				tip = "设置成功！";-->
+<!--				break;-->
+<!--			case 5:-->
+<!--				tip = "数据拉取失败";-->
+<!--				break;-->
+<!--			case 6:-->
+<!--				tip = "正在加载中，请稍后...";-->
+<!--				break;-->
+<!--		}-->
+<!--		ZENG.msgbox.show(tip, i);-->
+<!--	}-->
+<!--	function clickhide(){-->
+<!--		ZENG.msgbox._hide();-->
+<!--	}-->
+<!--	function clickautohide(i){-->
+<!--		var tip = "";-->
+<!--		switch(i){-->
+<!--			case 1:-->
+<!--				tip = "服务器繁忙，请稍后再试。";-->
+<!--				break;-->
+<!--			case 4:-->
+<!--				tip = "设置成功！";-->
+<!--				break;-->
+<!--			case 5:-->
+<!--				tip = "数据拉取失败";-->
+<!--				break;-->
+<!--			case 6:-->
+<!--				tip = "正在加载中，请稍后...";-->
+<!--				break;-->
+<!--		}-->
+<!--		ZENG.msgbox.show(tip, i, 3000);-->
+<!--	}-->
+<!--</script>-->

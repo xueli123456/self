@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+	<!--	html缓存问题-->
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+    <title>医技预约自助管理平台</title>
+	<link rel="stylesheet" href="../css/index.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+	<link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+    <script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/XDomainRequest.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/json2.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/popup.js?v=1.0.38"></script>
+	<!-–[if IE]>
+	<style type="text/css">
+		.homePage_context{
+			position: relative;
+			z-index: -1;
+		}
+		.user_info{
+			z-index: -1;
+		}
+	</style>
+	<![endif]–->
+</head>
+<body>
+<!--首页-->
+    <div class="homePage_title">
+    	<div class="homePage_title_logo">
+    		<div class="homePage_title_left">
+            	<img src="../images/index_img/log.png" alt="logo">
+	        </div>
+	        <div class="homePage_title_right">
+	            <p id="timer">2020年02月06日 11:18 星期四</p>
+	        </div>
+	        <div class="clear"></div>
+    	</div>
+        <div class="user_info">
+	        <div class="user_info_left">
+	            <p>欢迎使用!</p>
+				<span>姓名:</span><span class="name">xxx</span>
+				<span>性别:</span><span class="sex">xx</span>
+				<span>年龄:</span><span class="age">xx</span>
+	        </div>
+	        <div class="user_info_right">
+                <h2>操作倒计时:<span id="clock"></span>秒</h2>
+	        </div>
+	        <div class="clear"></div>
+        </div>
+    </div>
+   <div class="homePage_context">
+    	<div class="inspect inspectCheck" >
+    		<a href="inspectCheck.html">
+    			<img src="../images/index_img/inspact.png" alt="预约检查">
+	        	<p>预约检查</p>
+    		</a>
+	    </div>
+<!--	    <div class="inspect check">-->
+<!--	    	<a href="inspection.html">-->
+<!--    			<img src="images/index_img/check.png" alt="预约检验">-->
+<!--	        	<p>预约检验</p>-->
+<!--    		</a>-->
+<!--	    </div>-->
+	    <div class="inspect pay" >
+	    	<a href="checkPayment.html">
+		        <img src="../images/index_img/pay.png" alt="签到缴费">
+		        <p>签到缴费</p>
+	         </a>
+	    </div>
+	    <div class="inspect contract" >
+	    	<a href="revision.html">
+		        <img src="../images/index_img/contract.png" alt="改约退约">
+	        	<p>改约退约</p>
+	         </a>
+	    </div>
+	    <div class="inspect voucher" >
+	    	<a href="voucher.html">
+		        <img src="../images/index_img/voucher.png" alt="凭证打印">
+	        	<p>凭证打印</p>
+	         </a>
+	    </div>
+	    <div class="inspect hospitalization">
+	    	<a href="inspectList.html">
+		        <img src="../images/index_img/record.png" alt="医技预约记录">
+	        	<p>医技预约记录</p>
+	        </a>
+	    </div>
+	    <div class="inspect record" >
+	    	<a href="appointmentRecord.html">
+		        <img src="../images/index_img/hospitalization.png" alt="预约记录">
+	        	<p>预住院申请记录</p>
+	         </a>
+	    </div>
+	    <div class="clear"></div>
+	   <p style="position:relative;font-size: 14px;margin-top: 16px;display: block;color: rgb(128,128,128);">天璇信息 | 技术支持</p>
+   </div>
+	<div class="tipPopup-mask"></div>
+</body>
+</html>
+<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+<script type="text/javascript" src="../util/http.js?v=1.0.38"></script>
+<script type="text/javascript" src="../util/util.js?v=1.0.38"></script>
+<script type="text/javascript" src="../js/index.js?v=1.0.38"></script>
+

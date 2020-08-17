@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+	<!--	html缓存问题-->
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>医技预约自助机</title>
+	<link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+	<link rel="stylesheet" href="../css/inspectCheck.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+	<link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+	<script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../js/json2.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+    <!--[if IE]>
+    <script src="../util/base64-polyfill.js?v=1.0.38"></script>
+    <![endif]-->
+</head>
+<body>
+<!--改约退约-->
+<div class="homePage_title">
+	<div class="homePage_title_logo">
+		<div class="homePage_title_left">
+			<img src="../images/index_img/log.png" alt="logo">
+		</div>
+		<div class="homePage_title_right">
+			<p id="timer">2020年02月06日 11:18 星期四</p>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="user_info">
+		   <div class="backHome" id="clickBackHome">
+			<a>
+				首页
+			</a>
+		</div>
+		<div class="user_info_left">
+			<p>欢迎使用!</p>
+			<span>姓名:</span><span class="name">xxx</span>
+			<span>性别:</span><span class="sex">xx</span>
+			<span>年龄:</span><span class="age">xx</span>
+		</div>
+		<div class="user_info_right">
+			<h2>操作倒计时:<span id="clock"></span>秒</h2>
+		</div>
+		<div class=" user_info_right backBtn">
+            <h6>返回上一页</h6>
+        </div>
+		<div class="clear"></div>
+	</div>
+</div>
+<div class="inspeckCheck_content">
+	<div class="content_left" id="content_left">
+		<div class="clear"></div>
+	</div>
+	<div class="content_right">
+		<div class="prev">上一页</div>
+		<span>
+			<span class="pageNum">1</span>
+			/
+			<span class="pageNo">1</span>
+		</span>
+		<div class="next">下一页</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- 无改约退约 -->
+<div class="reserSuccess" style="display: none">
+    <div class="reservationInf">
+        <h2>温馨提示</h2>
+        <p style="margin: 18% 0;">您没有可改约或者退约的申请单！</p>
+    </div>
+</div>
+<div class="tipPopup-mask"></div>
+</body>
+</html>
+<script src="../util/http.js?v=1.0.38"></script>
+<script src="../util/util.js?v=1.0.38"></script>
+<script src="../js/popup.js?v=1.0.38"></script>
+<script type="text/javascript">
+	countdown('92530018103527854',true);
+	$(".tipPopup-mask").css("display", "block")
+	$(".content_right").css("display", "none")
+	ZENG.msgbox.show("正在加载中，请稍后...", 6, 5000);
+	//查询改约退约申请单   1：查询已预约未签到记录
+	   //调用接口数据
+    var pageNo = 1;
+    var pageNum = 4;
+	var pageSize = 4;
+	var data={
+				"pageNo": pageNo,
+				"pageNum": pageNum,
+            	"pageSize": pageSize,
+				"patientId":localStorage.getItem("patientId"),
+				"type": 1
+		 };
+	getData(data);
+	var getRes = '';
+	function getData(data){
+		post('selfMachine/queryPatientApplySignList',data,function(res){
+			if(res.code == 200){
+				var od=document.getElementById("content_left");
+			od.innerHTML = ''
+            //console.log(res);
+			res = res.result;
+			getRes = res;
+			//console.log(getRes)
+			resData = res;
+			if(res.list.length == 0){
+				ZENG.msgbox._hide();
+                $(".tipPopup-mask").css("display", "none")
+                $('.reserSuccess').css('display','block');
+                $('.inspeckCheck_content').css('display','none');
+            }else{
+				ZENG.msgbox._hide();
+                $(".tipPopup-mask").css("display", "none")
+                $(".content_right").css("display", "block")
+				$('.pageNum').html(getRes.pageNum);
+				$('.pageNo').html(getRes.pages);
+				for(var i=0;i<res.list.length;i++){
+					var remarks ='';
+					if (res.list[i].remarks == '' || res.list[i].remarks == '|' || res.list[i].remarks == null) {
+						remarks = '无'
+					}else{
+						var array = res.list[i].remarks.split("|");
+						remarks = array.join('')
+					}
+					op= '<div class="apply_info voucherInfo">'+
+							'<p>'+'<span class="selectionName">'+ '申请单号：'+'</span>' + '<span class="selectionContent">'+res.list[i].inspectForm +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '申请科室：'+'</span>' + '<span class="selectionContent">'+res.list[i].applyOffice +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '申请医生：'+'</span>' + '<span class="selectionContent">'+res.list[i].applyDoctor +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '预约时间：'+'</span>' + '<span class="selectionContent">'+res.list[i].reservationTime +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '检查项目：'+'</span>' + '<span class="selectionContent">'+res.list[i].inspectProject +'</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '合计金额：'+'</span>' + '<span class="selectionContent">'+res.list[i].totalMoney +'元' + '</span>'+'</p>'+
+							'<p>'+'<span class="selectionName">'+ '状'+ '    '+'态：'+'</span>'+'<span class="selectionContent">'+res.list[i].status +'</span>'+'</p>'+
+							'<p class="remarks">'+'<span class="selectionName">'+ '注意事项：' + '</span>'+'<span class="selectionContent">'+ remarks +'</span>'+'</p>'+
+							'<div class="signIn revisionSign">' + '改约' + '</div>' +
+							'<div class="signIn cancelSign">' + '退约' + '</div>' +
+						'</div>'
+						od.innerHTML += op;
+					};
+				}
+			}
+			},function(){
+				//console.log("提交失败！")
+		})
+	}
+	// 点击下一个页
+	$('.next').click(function(){
+		//console.log(getRes.nextPage)
+		if(getRes.nextPage >0){
+			//console.log(getRes.nextPage)
+			// pageNo = pageNo++;
+			var data = {
+					"pageNo": ++pageNo,
+					"pageNum": pageNum,
+					"pageSize": pageSize,
+					"patientId":localStorage.getItem("patientId"),
+					"type": 1
+				};
+			//console.log(data);
+			getData(data);
+		}else{
+			//console.log('最后一页');
+		}
+	});
+	//点击下一页
+	$('.prev').click(function(){
+		if(getRes.prePage>0){
+			// pageNo = pageNo--;
+			var data = {
+					"pageNo": --pageNo,
+					"pageNum": pageNum,
+					"pageSize": pageSize,
+					"patientId":localStorage.getItem("patientId"),
+					"type": 1
+				};
+			//console.log(data);
+			getData(data);
+		}else{
+			//console.log('第一页');
+		}
+	});
+
+	$('.content_left').on('click','.revisionSign',function(){
+		var index = $(this).index('.revisionSign')
+		var revision = {
+			"reservationId":resData.list[index].reservationId,   //预约Id
+			"reservableSourcePoolId":resData.list[index].reservableSourcePoolId,
+			"officeId":resData.list[index].officeId,
+			"execOfficeName":resData.list[index].execOfficeName,
+			"checkProName":resData.list[index].inspectProject,
+			"type":1
+		}
+		//console.log(revision);
+		var popup = new Popup({
+			'type': 'submit',
+			'title': '系统提示',
+			'text': '确认改约？',
+			'cancelbutton': true,
+			'submitcolor': '#fff',
+			'submitbgcolor': '#5BC67E',
+			'submitbordercolor': '#5BC67E',
+			'cancelcolor': '#5BC67E',
+			'cancelbgcolor': '#fff',
+			'cancelbordercolor': '#5BC67E',
+			'submitCallBack': function(){
+				window.location.href = "selectionDate.html?" + window.btoa(window.encodeURIComponent('revision=' + JSON.stringify(revision)))
+			},
+		})
+	})
+	$('.content_left').on('click','.cancelSign',function(){
+		var index = $(this).index('.cancelSign')
+		var popup = new Popup({
+			'type': 'submit',
+			'title': '系统提示',
+			'text': '确认退约？',
+			'cancelbutton': true,
+			'submitcolor': '#fff',
+            'submitbgcolor': '#5BC67E',
+            'submitbordercolor': '#5BC67E',
+            'cancelcolor': '#5BC67E',
+            'cancelbgcolor': '#fff',
+            'cancelbordercolor': '#5BC67E',
+			'submitCallBack': function(){
+				$(".tipPopup-mask").css("display","block")
+				var tip = "正在退约中，请稍等...";
+				ZENG.msgbox.show(tip,6,5000);
+				//退约接口
+				var reservationId = resData.list[index].reservationId;   //预约Id
+				var data = {"reservationId": reservationId }
+				post("selfMachine/withdrawalContract",data, function (res) {
+					if(res.code ==200){
+						ZENG.msgbox._hide();
+						var tip = "退约成功";
+						ZENG.msgbox.show(tip,4);
+							setTimeout(function () {
+								$(".tipPopup-mask").css("display","none")
+								window.location.href = "index.html?patientId="+localStorage.getItem("patientId")
+							},2000)
+					}else{
+							ZENG.msgbox.show(res.message+",请联系管理员!", 5,2000);
+							setTimeout(function(){
+								window.location.href = "index.html?patientId="+localStorage.getItem("patientId")
+							},2000)
+				      	}
+					},
+					function () {
+						//console.log("提交失败！")
+					});
+			},
+		})
+	})
+</script>
+<script>
+
+	// function clickme(i){
+	// 	var tip = "";
+	// 	switch(i){
+	// 		case 1:
+	// 			tip = "服务器繁忙，请稍后再试。";
+	// 			break;
+	// 		case 4:
+	// 			tip = "设置成功！";
+	// 			break;
+	// 		case 5:
+	// 			tip = "数据拉取失败";
+	// 			break;
+	// 		case 6:
+	// 			tip = "正在加载中，请稍后...";
+	// 			break;
+	// 	}
+	// 	ZENG.msgbox.show(tip, i);
+	// }
+	// function clickhide(){
+	// 	ZENG.msgbox._hide();
+	// }
+	// function clickautohide(i){
+	// 	var tip = "";
+	// 	switch(i){
+	// 		case 1:
+	// 			tip = "服务器繁忙，请稍后再试。";
+	// 			break;
+	// 		case 4:
+	// 			tip = "设置成功！";
+	// 			break;
+	// 		case 5:
+	// 			tip = "数据拉取失败";
+	// 			break;
+	// 		case 6:
+	// 			tip = "正在加载中，请稍后...";
+	// 			break;
+	// 	}
+	// 	ZENG.msgbox.show(tip, i, 3000);
+	// }
+</script>

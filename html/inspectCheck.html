@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
+    <!--	html缓存问题-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>医技预约自助机</title>
+    <link rel="stylesheet" href="../css/index.css?v=1.0.38"/>
+    <link rel="stylesheet" href="../css/inspectCheck.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/popup.css?v=1.0.38">
+    <link rel="stylesheet" href="../css/msgbox.css?v=1.0.38" />
+    <script type="text/javascript" src="../js/jquery-1.11.0.js?v=1.0.38"></script>
+    <script type="text/javascript" src="../js/XDomainRequest.js?v=1.0.38"></script>
+    <script type="text/javascript" src="../js/msgbox.js?v=1.0.38"></script>
+	<script type="text/javascript" src="../util/public.js?v=1.0.38"></script>
+    <!--[if IE]>
+    <script src="../util/base64-polyfill.js?v=1.0.38"></script>
+    <![endif]-->
+    <!-–[if IE]>
+    <style type="text/css">
+        .inspeckCheck_content{
+            position: relative;
+            z-index: -1;
+        }
+    </style>
+    <![endif]–->
+</head>
+<body>
+<!--预约检查-->
+<div class="homePage_title">
+    <div class="homePage_title_logo">
+        <div class="homePage_title_left">
+            <img src="../images/index_img/log.png" alt="logo">
+        </div>
+        <div class="homePage_title_right">
+            <p id="timer">2020年02月06日 11:18 星期四</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="user_info">
+           <div class="backHome" id="clickBackHome">
+            <a>
+                首页
+            </a>
+        </div>
+        <div class="user_info_left">
+            <p>欢迎使用!</p>
+            <span>姓名:</span><span class="name">xxx</span>
+            <span>性别:</span><span class="sex">xx</span>
+            <span>年龄:</span><span class="age">xx</span>
+        </div>
+        <div class="user_info_right">
+            <h2>操作倒计时:<span id="clock"></span>秒</h2>
+        </div>
+        <div class=" user_info_right backBtn">
+            <h6>返回上一页</h6>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- 无预约检查 -->
+<div class="reserSuccess" style="display: none">
+    <div class="reservationInf">
+        <h2>温馨提示</h2>
+        <p style="margin: 18% 33%;">您没有申请单！</p>
+    </div>
+</div>
+<div class="inspeckCheck_content">
+    <div class="content_left" id="content_left">
+        <div class="clear"></div>
+    </div>
+    <div class="content_right">
+        <div class="prev">上一页</div>
+        <span>
+			<span class="pageNum">1</span>
+			/
+			<span class="pageNo">1</span>
+		</span>
+        <div class="next">下一页</div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="tipPopup-mask"></div>
+</body>
+</html>
+<script src="../util/http.js?v=1.0.38"></script>
+<script src="../util/util.js?v=1.0.38"></script>
+<script src="../js/popup.js?v=1.0.38"></script>
+<script src="../js/json2.js?v=1.0.38"></script>
+<script type="text/javascript">
+
+    $(".tipPopup-mask").css("display", "block")
+    $(".content_right").css("display", "none")
+    ZENG.msgbox.show("正在加载中，请稍后...", 6, 10000)
+    //调用接口数据
+    var pageNo = 1;
+    var pageNum = 4;
+    var pageSize = 4;
+    var startDateTime = getTwoYear();
+    var endDateTime = tomorrow();
+    var data={
+            "endDateTime": endDateTime, //结束日期
+            "pageNo": pageNo,
+            "pageNum": pageNum,
+            "pageSize": pageSize,
+            "patientId":localStorage.getItem("patientId"),
+            "startDateTime": startDateTime //开始日期
+        };
+    var arr = [];
+    var pages = null;
+    getData();
+    var currenpage =1;
+    var getRes = '';
+    function getData(){
+        post('selfMachine/queryPatientApplyInfo',data,function(res){
+            if(res.code == 200){
+                countdown('92530018103527854',true);
+                getRes  = res.result;
+                // 总共页数
+                pages=getRes.length/pageSize;
+                if(parseInt(pages)==pages){
+                        pages=parseInt(pages);
+                }else{
+                    pages=parseInt(pages)+1;
+                }
+                 $('.pageNo').html(pages);
+                 //数组
+                    arr=getTableData(currenpage,pageSize,getRes);
+
+                if(getRes.length == 0){
+                    ZENG.msgbox._hide();
+                    $(".tipPopup-mask").css("display", "none")
+                    $('.reserSuccess').css('display','block');
+                    $('.inspeckCheck_content').css('display','none');
+                }else{
+                    ZENG.msgbox._hide();
+                    $(".tipPopup-mask").css("display", "none")
+                    $(".content_right").css("display", "block")
+                    applyInfo(arr.data)
+                }
+            }else{
+                ZENG.msgbox.show(res.message+",请联系管理员!", 5,2000);
+                setTimeout(function(){
+                    window.location.href = "index.html?patientId="+ localStorage.getItem("patientId")
+                },2000)
+            }
+        },function(){
+            //console.log("提交失败！")
+        })
+    }
+    // 页面内容
+    function applyInfo(arr){
+        var od = document.getElementById("content_left");
+        $('.pageNum').html(currenpage);
+        od.innerHTML = ''
+        for(var i=0;i<arr.length;i++){
+            var remarks ='';
+            if (arr[i].remarks == '' || arr[i].remarks == '|' || arr[i].remarks == null ) {
+                remarks = '无'
+            }else{
+                var array = arr[i].remarks.split("|");
+                remarks = array.join('')
+            }
+            op= '<div class="apply_info voucherInfo">'+
+                '<p>'+'<span class="selectionName">'+ '申请单号：'+'</span>' + '<span class="selectionContent">'+arr[i].inspectForm +'</span>'+'</p>'+
+                '<p>'+'<span class="selectionName">'+ '申请科室：'+'</span>'+'<span class="selectionContent">'+arr[i].appOfficeName +'</span>'+'</p>'+
+                '<p>'+'<span class="selectionName">'+ '申请医生：'+'</span>'+'<span class="selectionContent">'+arr[i].appDoctorName +'</span>'+'</p>'+
+                '<p>'+'<span class="selectionName">'+ '申请时间：'+'</span>'+'<span class="selectionContent">'+arr[i].applyTime +'</span>'+'</p>'+
+                '<p>'+'<span class="selectionName">'+ '临床诊断：'+'</span>'+'<span class="selectionContent">'+arr[i].cclinDign +'</span>'+'</p>'+
+                '<p>'+'<span class="selectionName">'+ '检查项目：'+'</span>'+'<span class="selectionContent">'+arr[i].checkProName +'</span>'+'</p>'+
+                '<p>'+'<span class="selectionName">'+ '合计金额：'+'</span>'+'<span class="selectionContent">'+arr[i].money +'元</span>'+'</p>'+
+                '<p class="remarks have">'+'<span class="selectionName">'+ '注意事项：' + '</span>'+'<span class="selectionContent">'+ remarks +'</span>'+'</p>'+
+                // '<p class="remarks none">'+'注意事项：'+'<span class="selectionContent">无</span>'+'</p>'+
+                '<div class="signIn">'+'预约'+'</div>'
+            '</div>'
+            od.innerHTML += op;
+        }
+    }
+
+
+    var that = this;
+    // 点击下一个页
+	$('.next').click(function(){
+        if(currenpage>=pages){
+            return;
+        }else{
+            arr=getTableData(++currenpage,pageSize,getRes);
+            applyInfo(arr.data)
+        }
+
+    });
+    //点击上一页
+	$('.prev').click(function(){
+        if(currenpage<=1){
+             return;
+        }else{
+        arr=getTableData(--currenpage,pageSize,getRes);
+        applyInfo(arr.data)
+      }
+    });
+
+    $('.content_left').on('click','.signIn',function(){
+        var index = $(this).index('.signIn');
+        var inspectData =  arr.data[index]
+        if(inspectData.applayFlag == true){
+            if (inspectData.remarks == '' || inspectData.remarks == '|' || inspectData.remarks == null) {
+                remarks = '无'
+            }else{
+                var array = inspectData.remarks.split("|");
+                remarks = array.join('')
+            }
+            var popup = new Popup({
+                'type': 'submit',
+                'title': '温馨提示',
+                'text': '注意事项: '+ remarks,
+                'cancelbutton': true,
+                'submitcolor': '#fff',
+                'submitbgcolor': '#5BC67E',
+                'submitbordercolor': '#5BC67E',
+                'cancelcolor': '#5BC67E',
+                'cancelbgcolor': '#fff',
+                'cancelbordercolor': '#5BC67E',
+                'submitCallBack': function(){
+                    window.location.href = "selectionDate.html?" + window.btoa(window.encodeURIComponent('item=' + JSON.stringify(inspectData)))
+                },
+            })
+        } else {
+            $(".tipPopup-mask").css("display", "block")
+            ZENG.msgbox.show( '该申请单存在不同检查组的项目，请重新开单预约', 5, 2000);
+            setTimeout(function(){
+                $(".tipPopup-mask").css("display", "none")
+            },2000)
+        }
+
+    })
+
+
+    function getTwoYear() {
+        // 先获取当前时间
+        var curDate = (new Date()).getTime();
+        // 将半年的时间单位换算成毫秒
+        var halfYear = 365*2 * 24 * 3600 * 1000;
+        var pastResult = curDate - halfYear;  // 半年前的时间（毫秒单位）
+        // 日期函数，定义起点为半年前
+        var pastDate = new Date(pastResult),
+            pastYear = pastDate.getFullYear(),
+            pastMonth = pastDate.getMonth() + 1,
+            pastDay = pastDate.getDate();
+        return pastYear + '-' + pastMonth + '-' + pastDay;
+    }
+
+    function tomorrow(){
+        var d = new Date();
+        var str = '-';
+        var isEndDate = true;
+        var mon = d.getMonth() + 1;
+        var day = d.getDate();//设置默认的月份和天数
+        if (isEndDate) {
+            //当输入为结束日期时，执行如下代码
+            d.setTime(d.getTime() + 3600 * 24 * 1000);
+            day = d.getDate();
+            mon = d.getMonth() + 1;
+        }
+        var monthString = mon.toString();
+        if (mon < 10) {
+            //当月份小于10时，显示月份的时候在前面加一个0
+            monthString = '0' + monthString;
+        }
+        var dayString = day.toString();
+        if (day < 10) {
+            //当天数小于10时，显示天数的时候在前面加一个0
+            dayString = '0' + dayString;
+        }
+        //根据传进的str来返回指定的时间格式，str可以为任意格式的字符串
+        return [d.getFullYear(), monthString, dayString].join(str);
+    }
+</script>
