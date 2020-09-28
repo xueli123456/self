@@ -1,5 +1,5 @@
-// var baseURL = "https://yjyys.nwwch.com:9085/api/";    // 测试后台
-var baseURL = "http://10.7.1.14:9999/api/";    // 正式后台(内网)
+// var baseURL = "h";    // 测试后台
+var baseURL = "http:";    // 正式后台(内网)
 function baseAjax(path,data,type,success,error,dataType){
     // console.log('接口请求地址前部分')
     /*
